@@ -1,4 +1,4 @@
-# hackathon-finder
+
 # ⚡ HackMatch — Hackathon Team Finder
 
 A web app for college students to find teammates for hackathons, built for **State College of Engineering** (easily rebranded).
