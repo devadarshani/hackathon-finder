@@ -1,0 +1,1536 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>HackMatch — Find Your Team</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  :root {
+    --bg: #f7f8fc;
+    --surface: #ffffff;
+    --surface2: #f0f2f8;
+    --border: #e2e6f0;
+    --primary: #2563eb;
+    --primary-light: #eff4ff;
+    --primary-dark: #1d4ed8;
+    --accent: #06b6d4;
+    --accent2: #8b5cf6;
+    --text: #0f172a;
+    --text2: #475569;
+    --text3: #94a3b8;
+    --success: #10b981;
+    --warning: #f59e0b;
+    --danger: #ef4444;
+    --radius: 14px;
+    --radius-sm: 8px;
+    --shadow: 0 2px 16px rgba(15,23,42,0.07);
+    --shadow-lg: 0 8px 40px rgba(15,23,42,0.12);
+  }
+
+  * { margin:0; padding:0; box-sizing:border-box; }
+
+  body {
+    font-family: 'Sora', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* ── NAV ── */
+  nav {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 32px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 1px 8px rgba(15,23,42,0.05);
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 1.2rem;
+    color: var(--text);
+    letter-spacing: -0.02em;
+  }
+
+  .logo-icon {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--primary), var(--accent2));
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    color: #fff;
+    font-size: 16px;
+  }
+
+  .college-badge {
+    font-size: 0.7rem;
+    font-weight: 500;
+    color: var(--text3);
+    background: var(--surface2);
+    padding: 3px 10px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.03em;
+  }
+
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+
+  .nav-btn {
+    padding: 8px 18px;
+    border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+  }
+
+  .nav-btn.ghost {
+    background: transparent;
+    color: var(--text2);
+    border: 1px solid var(--border);
+  }
+
+  .nav-btn.ghost:hover { background: var(--surface2); }
+
+  .nav-btn.primary {
+    background: var(--primary);
+    color: #fff;
+  }
+
+  .nav-btn.primary:hover { background: var(--primary-dark); }
+
+  /* ── PAGES ── */
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ── LANDING ── */
+  .hero {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 80px 24px 60px;
+    text-align: center;
+  }
+
+  .hero-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--primary-light);
+    color: var(--primary);
+    border: 1px solid #bfdbfe;
+    padding: 5px 14px;
+    border-radius: 20px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    margin-bottom: 28px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero h1 {
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    font-weight: 700;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+
+  .hero h1 span {
+    background: linear-gradient(135deg, var(--primary), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero p {
+    font-size: 1.05rem;
+    color: var(--text2);
+    line-height: 1.7;
+    max-width: 520px;
+    margin: 0 auto 36px;
+  }
+
+  .hero-actions { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+
+  .btn {
+    padding: 12px 28px;
+    border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.92rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.18s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-primary {
+    background: var(--primary);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(37,99,235,0.3);
+  }
+
+  .btn-primary:hover {
+    background: var(--primary-dark);
+    box-shadow: 0 6px 20px rgba(37,99,235,0.4);
+    transform: translateY(-1px);
+  }
+
+  .btn-outline {
+    background: var(--surface);
+    color: var(--text);
+    border: 1.5px solid var(--border);
+  }
+
+  .btn-outline:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+
+  .stats-row {
+    display: flex;
+    justify-content: center;
+    gap: 48px;
+    margin-top: 64px;
+    padding-top: 40px;
+    border-top: 1px solid var(--border);
+    flex-wrap: wrap;
+  }
+
+  .stat { text-align: center; }
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--primary);
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .stat-label { font-size: 0.8rem; color: var(--text3); margin-top: 4px; font-weight: 500; }
+
+  /* ── BROWSE ── */
+  .browse-container {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .browse-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .browse-header h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+  .browse-header p { font-size: 0.87rem; color: var(--text3); margin-top: 4px; }
+
+  .search-filter-bar {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 28px;
+    flex-wrap: wrap;
+  }
+
+  .search-input {
+    flex: 1;
+    min-width: 220px;
+    padding: 11px 16px 11px 40px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.9rem;
+    background: var(--surface);
+    color: var(--text);
+    outline: none;
+    transition: border-color 0.18s;
+    position: relative;
+  }
+
+  .search-input:focus { border-color: var(--primary); }
+
+  .search-wrap { position: relative; flex: 1; min-width: 220px; }
+  .search-icon {
+    position: absolute;
+    left: 13px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--text3);
+    font-size: 15px;
+    pointer-events: none;
+  }
+
+  .filter-select {
+    padding: 11px 16px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.88rem;
+    background: var(--surface);
+    color: var(--text2);
+    outline: none;
+    cursor: pointer;
+    min-width: 160px;
+    transition: border-color 0.18s;
+  }
+
+  .filter-select:focus { border-color: var(--primary); }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+  }
+
+  /* ── PROFILE CARD ── */
+  .profile-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    transition: all 0.2s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .profile-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--primary), var(--accent2));
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .profile-card:hover {
+    border-color: #bfdbfe;
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-2px);
+  }
+
+  .profile-card:hover::before { opacity: 1; }
+
+  .card-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 14px;
+    margin-bottom: 16px;
+  }
+
+  .avatar {
+    width: 50px; height: 50px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .card-info { flex: 1; }
+  .card-name { font-weight: 600; font-size: 0.98rem; }
+  .card-role {
+    font-size: 0.78rem;
+    color: var(--primary);
+    font-weight: 500;
+    margin-top: 2px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .card-year { font-size: 0.75rem; color: var(--text3); margin-top: 3px; }
+
+  .available-badge {
+    font-size: 0.7rem;
+    font-weight: 600;
+    padding: 3px 9px;
+    border-radius: 20px;
+    white-space: nowrap;
+  }
+
+  .available-badge.yes {
+    background: #d1fae5;
+    color: #065f46;
+  }
+
+  .available-badge.no {
+    background: #fee2e2;
+    color: #991b1b;
+  }
+
+  .card-bio {
+    font-size: 0.82rem;
+    color: var(--text2);
+    line-height: 1.6;
+    margin-bottom: 14px;
+  }
+
+  .skill-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+
+  .skill-tag {
+    font-size: 0.72rem;
+    font-weight: 500;
+    padding: 4px 10px;
+    border-radius: 20px;
+    border: 1px solid;
+  }
+
+  .card-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .card-hackathons { font-size: 0.75rem; color: var(--text3); }
+  .card-hackathons span { color: var(--primary); font-weight: 600; }
+
+  .contact-btn {
+    padding: 7px 16px;
+    background: var(--primary);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.18s;
+  }
+
+  .contact-btn:hover { background: var(--primary-dark); }
+  .contact-btn:disabled {
+    background: var(--surface2);
+    color: var(--text3);
+    cursor: not-allowed;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15,23,42,0.45);
+    backdrop-filter: blur(3px);
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface);
+    border-radius: var(--radius);
+    padding: 32px;
+    max-width: 500px;
+    width: 100%;
+    box-shadow: var(--shadow-lg);
+    position: relative;
+    animation: slideUp 0.22s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+  }
+
+  @keyframes slideUp {
+    from { transform: translateY(18px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .modal-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    cursor: pointer;
+    font-size: 15px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text3);
+    transition: all 0.15s;
+  }
+
+  .modal-close:hover { background: var(--surface2); color: var(--text); }
+
+  .modal h2 { font-size: 1.2rem; font-weight: 700; margin-bottom: 6px; letter-spacing: -0.02em; }
+  .modal p.sub { font-size: 0.85rem; color: var(--text3); margin-bottom: 24px; }
+
+  /* ── FORMS ── */
+  .form-group { margin-bottom: 18px; }
+  .form-label {
+    display: block;
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--text2);
+    margin-bottom: 7px;
+  }
+
+  .form-input, .form-select, .form-textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+    font-family: 'Sora', sans-serif;
+    font-size: 0.88rem;
+    color: var(--text);
+    background: var(--surface);
+    outline: none;
+    transition: border-color 0.18s;
+  }
+
+  .form-input:focus, .form-select:focus, .form-textarea:focus {
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.08);
+  }
+
+  .form-textarea { resize: vertical; min-height: 80px; line-height: 1.6; }
+
+  .skills-picker { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+
+  .skill-pill {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1.5px solid var(--border);
+    font-size: 0.78rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s;
+    color: var(--text2);
+    background: var(--surface);
+    user-select: none;
+  }
+
+  .skill-pill:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-light); }
+  .skill-pill.selected { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+  .toggle-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 14px;
+    border: 1.5px solid var(--border);
+    border-radius: var(--radius-sm);
+  }
+
+  .toggle-label { font-size: 0.87rem; font-weight: 500; }
+  .toggle-sub { font-size: 0.75rem; color: var(--text3); margin-top: 2px; }
+
+  .toggle {
+    position: relative;
+    width: 42px; height: 24px;
+  }
+
+  .toggle input { display: none; }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: var(--border);
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 18px; height: 18px;
+    top: 3px; left: 3px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform 0.2s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.15);
+  }
+
+  .toggle input:checked + .toggle-slider { background: var(--primary); }
+  .toggle input:checked + .toggle-slider::before { transform: translateX(18px); }
+
+  /* ── PROFILE PAGE ── */
+  .profile-page-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .profile-hero {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px;
+    margin-bottom: 20px;
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+    flex-wrap: wrap;
+  }
+
+  .profile-avatar-lg {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    flex-shrink: 0;
+  }
+
+  .profile-details { flex: 1; }
+  .profile-name { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.02em; }
+  .profile-role-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: var(--primary-light);
+    color: var(--primary);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin: 8px 0;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .profile-meta { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 10px; }
+  .meta-item { font-size: 0.82rem; color: var(--text3); display: flex; align-items: center; gap: 5px; }
+  .meta-item strong { color: var(--text2); }
+
+  .profile-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px;
+    margin-bottom: 16px;
+  }
+
+  .section-title { font-size: 0.95rem; font-weight: 700; margin-bottom: 16px; color: var(--text); }
+
+  /* ── TOAST ── */
+  .toast {
+    position: fixed;
+    bottom: 24px; right: 24px;
+    background: var(--text);
+    color: #fff;
+    padding: 14px 20px;
+    border-radius: var(--radius-sm);
+    font-size: 0.87rem;
+    font-weight: 500;
+    display: none;
+    align-items: center;
+    gap: 10px;
+    box-shadow: var(--shadow-lg);
+    z-index: 300;
+    animation: fadeInUp 0.2s ease;
+    max-width: 320px;
+  }
+
+  .toast.show { display: flex; }
+
+  @keyframes fadeInUp {
+    from { transform: translateY(10px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  /* ── CONTACT MODAL SPECIFIC ── */
+  .person-mini {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    background: var(--surface2);
+    border-radius: var(--radius-sm);
+    margin-bottom: 20px;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text3);
+  }
+
+  .empty-state .empty-icon { font-size: 2.5rem; margin-bottom: 14px; }
+  .empty-state p { font-size: 0.9rem; }
+
+  /* ── REQUESTS PAGE ── */
+  .requests-container {
+    max-width: 700px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  .request-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 24px;
+    margin-bottom: 14px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    transition: box-shadow 0.18s;
+    flex-wrap: wrap;
+  }
+
+  .request-card:hover { box-shadow: var(--shadow); }
+
+  .request-info { flex: 1; }
+  .request-name { font-weight: 600; font-size: 0.95rem; }
+  .request-msg { font-size: 0.82rem; color: var(--text2); margin-top: 4px; line-height: 1.5; }
+  .request-time { font-size: 0.73rem; color: var(--text3); margin-top: 6px; font-family: 'JetBrains Mono', monospace; }
+
+  .request-actions { display: flex; gap: 8px; }
+
+  .btn-sm {
+    padding: 7px 16px;
+    border-radius: 6px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: all 0.15s;
+  }
+
+  .btn-accept { background: var(--success); color: #fff; }
+  .btn-accept:hover { background: #059669; }
+  .btn-decline { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+  .btn-decline:hover { background: #fee2e2; color: var(--danger); border-color: #fca5a5; }
+
+  /* ── NAV TABS ── */
+  .page-tabs {
+    display: flex;
+    gap: 4px;
+    padding: 0 32px;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .tab-btn {
+    padding: 14px 18px;
+    font-family: 'Sora', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--text3);
+    background: transparent;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.18s;
+  }
+
+  .tab-btn:hover { color: var(--text); }
+  .tab-btn.active { color: var(--primary); border-bottom-color: var(--primary); font-weight: 600; }
+
+  .notif-dot {
+    display: inline-block;
+    width: 7px; height: 7px;
+    background: var(--danger);
+    border-radius: 50%;
+    margin-left: 5px;
+    vertical-align: middle;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    nav { padding: 0 16px; }
+    .form-row { grid-template-columns: 1fr; }
+    .page-tabs { padding: 0 16px; }
+    .browse-container, .requests-container, .profile-page-container { padding: 24px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="logo">
+    <div class="logo-icon">⚡</div>
+    HackMatch
+    <span class="college-badge">STATE COLLEGE OF ENGINEERING</span>
+  </div>
+  <div class="nav-right" id="navRight">
+    <button class="nav-btn ghost" onclick="showModal('loginModal')">Log In</button>
+    <button class="nav-btn primary" onclick="showModal('registerModal')">Join Now</button>
+  </div>
+</nav>
+
+<!-- TABS (shown after login) -->
+<div class="page-tabs" id="pageTabs" style="display:none;">
+  <button class="tab-btn active" onclick="switchTab('browse')">🔍 Find People</button>
+  <button class="tab-btn" onclick="switchTab('myprofile')">👤 My Profile</button>
+  <button class="tab-btn" onclick="switchTab('requests')">📬 Requests <span class="notif-dot" id="notifDot"></span></button>
+</div>
+
+<!-- LANDING PAGE -->
+<div class="page active" id="page-landing">
+  <div class="hero">
+    <div class="hero-tag">⚡ For Hackathon Teams at State College</div>
+    <h1>Find Your <span>Perfect Teammate</span> for the Next Hackathon</h1>
+    <p>Browse students by skill, connect with developers, designers, and domain experts from your college to build your dream team.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="showModal('registerModal')">✨ Create Your Profile</button>
+      <button class="btn btn-outline" onclick="guestBrowse()">Browse Students →</button>
+    </div>
+    <div class="stats-row">
+      <div class="stat"><div class="stat-num" id="statStudents">0</div><div class="stat-label">Students Registered</div></div>
+      <div class="stat"><div class="stat-num" id="statAvailable">0</div><div class="stat-label">Looking for Teams</div></div>
+      <div class="stat"><div class="stat-num">12+</div><div class="stat-label">Skill Categories</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- BROWSE PAGE -->
+<div class="page" id="page-browse">
+  <div class="browse-container">
+    <div class="browse-header">
+      <div>
+        <h2>Find Your Teammate</h2>
+        <p id="browseCount">Showing all available students</p>
+      </div>
+      <button class="btn btn-primary" id="createProfileBtn" onclick="showModal('registerModal')" style="display:none;">+ Create Profile</button>
+    </div>
+    <div class="search-filter-bar">
+      <div class="search-wrap">
+        <span class="search-icon">🔍</span>
+        <input class="search-input" type="text" id="searchInput" placeholder="Search by name or skill..." oninput="filterCards()"/>
+      </div>
+      <select class="filter-select" id="roleFilter" onchange="filterCards()">
+        <option value="">All Roles</option>
+        <option>Frontend Developer</option>
+        <option>Backend Developer</option>
+        <option>Full Stack Developer</option>
+        <option>UI/UX Designer</option>
+        <option>ML / AI Engineer</option>
+        <option>Data Analyst</option>
+        <option>DevOps Engineer</option>
+        <option>Mobile Developer</option>
+        <option>Cybersecurity</option>
+        <option>Business / PM</option>
+      </select>
+      <select class="filter-select" id="availFilter" onchange="filterCards()">
+        <option value="">All Students</option>
+        <option value="yes">Available Only</option>
+        <option value="no">Not Available</option>
+      </select>
+    </div>
+    <div class="cards-grid" id="cardsGrid"></div>
+    <div class="empty-state" id="emptyState" style="display:none;">
+      <div class="empty-icon">🔍</div>
+      <p>No students match your filters. Try adjusting your search.</p>
+    </div>
+  </div>
+</div>
+
+<!-- MY PROFILE PAGE -->
+<div class="page" id="page-myprofile">
+  <div class="profile-page-container" id="myProfileContent"></div>
+</div>
+
+<!-- REQUESTS PAGE -->
+<div class="page" id="page-requests">
+  <div class="requests-container">
+    <div class="browse-header">
+      <div><h2>Team Requests</h2><p>People who want you on their team</p></div>
+    </div>
+    <div id="requestsList"></div>
+  </div>
+</div>
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- REGISTER MODAL -->
+<div class="modal-overlay" id="registerModal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('registerModal')">✕</button>
+    <h2>Create Your Profile</h2>
+    <p class="sub">Join HackMatch and get discovered by teammates 🚀</p>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Full Name *</label>
+        <input class="form-input" id="reg_name" type="text" placeholder="Arjun Sharma"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">College Email *</label>
+        <input class="form-input" id="reg_email" type="email" placeholder="roll@college.edu"/>
+      </div>
+    </div>
+
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Year *</label>
+        <select class="form-select" id="reg_year">
+          <option value="">Select Year</option>
+          <option>1st Year</option>
+          <option>2nd Year</option>
+          <option>3rd Year</option>
+          <option>4th Year</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Department *</label>
+        <select class="form-select" id="reg_dept">
+          <option value="">Select Dept</option>
+          <option>Computer Science</option>
+          <option>IT</option>
+          <option>Electronics</option>
+          <option>Mechanical</option>
+          <option>Civil</option>
+          <option>Electrical</option>
+          <option>Chemical</option>
+          <option>Mathematics</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Primary Role *</label>
+      <select class="form-select" id="reg_role">
+        <option value="">What do you do best?</option>
+        <option>Frontend Developer</option>
+        <option>Backend Developer</option>
+        <option>Full Stack Developer</option>
+        <option>UI/UX Designer</option>
+        <option>ML / AI Engineer</option>
+        <option>Data Analyst</option>
+        <option>DevOps Engineer</option>
+        <option>Mobile Developer</option>
+        <option>Cybersecurity</option>
+        <option>Business / PM</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Bio (what you'll bring to a team)</label>
+      <textarea class="form-textarea" id="reg_bio" placeholder="e.g. Passionate about building clean UIs. Experienced with React and Figma. Love solving user problems."></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Skills (select all that apply)</label>
+      <div class="skills-picker" id="reg_skills">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">GitHub / Portfolio URL</label>
+      <input class="form-input" id="reg_github" type="url" placeholder="https://github.com/yourhandle"/>
+    </div>
+
+    <div class="form-group">
+      <div class="toggle-row">
+        <div>
+          <div class="toggle-label">🟢 Available for Teams</div>
+          <div class="toggle-sub">Let others know you're looking</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" id="reg_available" checked/>
+          <div class="toggle-slider"></div>
+        </label>
+      </div>
+    </div>
+
+    <button class="btn btn-primary" style="width:100%; justify-content:center; padding:13px;" onclick="registerUser()">Create Profile & Join →</button>
+    <p style="text-align:center; font-size:0.8rem; color:var(--text3); margin-top:14px;">
+      Already have a profile? <a href="#" style="color:var(--primary);" onclick="hideModal('registerModal');showModal('loginModal')">Log in</a>
+    </p>
+  </div>
+</div>
+
+<!-- LOGIN MODAL -->
+<div class="modal-overlay" id="loginModal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('loginModal')">✕</button>
+    <h2>Welcome Back 👋</h2>
+    <p class="sub">Log in to view your profile and team requests</p>
+    <div class="form-group">
+      <label class="form-label">College Email</label>
+      <input class="form-input" id="login_email" type="email" placeholder="roll@college.edu"/>
+    </div>
+    <button class="btn btn-primary" style="width:100%; justify-content:center; padding:13px;" onclick="loginUser()">Log In →</button>
+    <p style="text-align:center; font-size:0.8rem; color:var(--text3); margin-top:14px;">
+      New here? <a href="#" style="color:var(--primary);" onclick="hideModal('loginModal');showModal('registerModal')">Create a profile</a>
+    </p>
+  </div>
+</div>
+
+<!-- CONTACT MODAL -->
+<div class="modal-overlay" id="contactModal">
+  <div class="modal">
+    <button class="modal-close" onclick="hideModal('contactModal')">✕</button>
+    <h2>Send Team Request</h2>
+    <p class="sub">Introduce yourself and explain why you'd make a great team</p>
+    <div class="person-mini" id="contactPersonMini"></div>
+    <div class="form-group">
+      <label class="form-label">Your Hackathon / Project Idea</label>
+      <input class="form-input" id="contact_hackathon" type="text" placeholder="e.g. Smart Campus App — InnoFest 2025"/>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message *</label>
+      <textarea class="form-textarea" id="contact_msg" placeholder="Hi! I'm building a team for... I think your skills in X would be perfect because..." style="min-height:110px;"></textarea>
+    </div>
+    <button class="btn btn-primary" style="width:100%; justify-content:center; padding:13px;" onclick="sendRequest()">Send Request ✉️</button>
+  </div>
+</div>
+
+<!-- VIEW PROFILE MODAL -->
+<div class="modal-overlay" id="viewProfileModal">
+  <div class="modal" style="max-width:560px;">
+    <button class="modal-close" onclick="hideModal('viewProfileModal')">✕</button>
+    <div id="viewProfileContent"></div>
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast">
+  <span id="toastIcon">✅</span>
+  <span id="toastMsg">Done!</span>
+</div>
+
+<script>
+// ══════════════════════════════════════
+//  DATA
+// ══════════════════════════════════════
+
+const SKILL_LIST = [
+  'React','Vue','Angular','HTML/CSS','JavaScript','TypeScript',
+  'Node.js','Python','Java','Go','Rust','C/C++','PHP','Ruby',
+  'Flutter','React Native','Swift','Kotlin',
+  'Django','FastAPI','Spring Boot','Express',
+  'MongoDB','PostgreSQL','MySQL','Firebase','Supabase',
+  'AWS','Docker','Kubernetes','CI/CD','Linux',
+  'Figma','Adobe XD','Illustrator','Motion Design',
+  'TensorFlow','PyTorch','Scikit-learn','OpenCV','NLP',
+  'Tableau','Power BI','SQL','Excel','Data Viz',
+  'Networking','Penetration Testing','Cryptography',
+  'Product Management','Market Research','Pitch Decks'
+];
+
+const SKILL_COLORS = [
+  { bg:'#eff4ff', color:'#3b82f6', border:'#bfdbfe' },
+  { bg:'#f0fdf4', color:'#16a34a', border:'#bbf7d0' },
+  { bg:'#fdf4ff', color:'#9333ea', border:'#e9d5ff' },
+  { bg:'#fff7ed', color:'#ea580c', border:'#fed7aa' },
+  { bg:'#ecfeff', color:'#0891b2', border:'#a5f3fc' },
+  { bg:'#fefce8', color:'#ca8a04', border:'#fde68a' },
+];
+
+const AVATAR_COLORS = [
+  '#2563eb','#7c3aed','#059669','#dc2626','#d97706','#0891b2','#be185d'
+];
+
+// seed data
+let users = [
+  { id:1, name:'Aditya Menon', email:'aditya@college.edu', year:'3rd Year', dept:'Computer Science', role:'Full Stack Developer', bio:'Love building end-to-end web apps. Experienced with MERN stack. Won 2 hackathons last year!', skills:['React','Node.js','MongoDB','JavaScript','Docker'], github:'https://github.com', available:true, requests:[] },
+  { id:2, name:'Priya Nair', email:'priya@college.edu', year:'2nd Year', dept:'IT', role:'UI/UX Designer', bio:'Passionate about creating intuitive user experiences. Proficient in Figma and prototyping. Design thinking enthusiast.', skills:['Figma','Adobe XD','HTML/CSS','Illustrator'], github:'https://dribbble.com', available:true, requests:[] },
+  { id:3, name:'Rahul Krishnan', email:'rahul@college.edu', year:'4th Year', dept:'Computer Science', role:'ML / AI Engineer', bio:'Working on ML models for real-world impact. Published 2 papers on NLP. Looking for product-minded teammates.', skills:['Python','TensorFlow','PyTorch','NLP','SQL'], github:'https://github.com', available:true, requests:[] },
+  { id:4, name:'Sneha Pillai', email:'sneha@college.edu', year:'3rd Year', dept:'Electronics', role:'Mobile Developer', bio:'Flutter and React Native dev. Built 3 published apps. Interested in IoT + mobile hybrid projects.', skills:['Flutter','React Native','Firebase','Kotlin','Python'], github:'https://github.com', available:false, requests:[] },
+  { id:5, name:'Vikram Das', email:'vikram@college.edu', year:'2nd Year', dept:'IT', role:'Backend Developer', bio:'Backend enthusiast with a love for clean APIs and databases. Currently learning Rust and Go.', skills:['Node.js','Go','PostgreSQL','Docker','Linux'], github:'https://github.com', available:true, requests:[] },
+  { id:6, name:'Ananya Iyer', email:'ananya@college.edu', year:'1st Year', dept:'Computer Science', role:'Frontend Developer', bio:'New to hackathons but enthusiastic! Strong in React and UI animations. Quick learner, great communicator.', skills:['React','JavaScript','HTML/CSS','Figma','TypeScript'], github:'https://github.com', available:true, requests:[] },
+  { id:7, name:'Karan Patel', email:'karan@college.edu', year:'4th Year', dept:'Mathematics', role:'Data Analyst', bio:'Data storytelling is my thing. Experienced with dashboards, SQL, and statistical analysis for business decisions.', skills:['SQL','Python','Tableau','Power BI','Excel'], github:'https://github.com', available:true, requests:[] },
+  { id:8, name:'Meera Suresh', email:'meera@college.edu', year:'3rd Year', dept:'Computer Science', role:'DevOps Engineer', bio:'Cloud infra and automation are my passion. AWS certified. Let me handle the deployment while you build!', skills:['AWS','Docker','Kubernetes','CI/CD','Linux','Python'], github:'https://github.com', available:false, requests:[] },
+];
+
+let currentUser = null;
+let contactTarget = null;
+let selectedSkills = [];
+
+// ══════════════════════════════════════
+//  INIT
+// ══════════════════════════════════════
+
+window.onload = () => {
+  populateSkillPicker();
+  updateStats();
+};
+
+function updateStats() {
+  document.getElementById('statStudents').textContent = users.length;
+  document.getElementById('statAvailable').textContent = users.filter(u=>u.available).length;
+}
+
+function populateSkillPicker() {
+  const container = document.getElementById('reg_skills');
+  container.innerHTML = '';
+  SKILL_LIST.forEach(s => {
+    const pill = document.createElement('div');
+    pill.className = 'skill-pill';
+    pill.textContent = s;
+    pill.onclick = () => toggleSkill(pill, s);
+    container.appendChild(pill);
+  });
+}
+
+function toggleSkill(el, skill) {
+  if (el.classList.contains('selected')) {
+    el.classList.remove('selected');
+    selectedSkills = selectedSkills.filter(s => s !== skill);
+  } else {
+    el.classList.add('selected');
+    selectedSkills.push(skill);
+  }
+}
+
+// ══════════════════════════════════════
+//  AUTH
+// ══════════════════════════════════════
+
+function registerUser() {
+  const name = document.getElementById('reg_name').value.trim();
+  const email = document.getElementById('reg_email').value.trim();
+  const year = document.getElementById('reg_year').value;
+  const dept = document.getElementById('reg_dept').value;
+  const role = document.getElementById('reg_role').value;
+  const bio = document.getElementById('reg_bio').value.trim();
+  const github = document.getElementById('reg_github').value.trim();
+  const available = document.getElementById('reg_available').checked;
+
+  if (!name || !email || !year || !dept || !role) {
+    showToast('⚠️ Please fill in all required fields', true); return;
+  }
+
+  if (users.find(u => u.email === email)) {
+    showToast('⚠️ Email already registered. Log in instead.', true); return;
+  }
+
+  const newUser = {
+    id: Date.now(),
+    name, email, year, dept, role,
+    bio: bio || 'Ready to hack and build great things!',
+    skills: selectedSkills,
+    github,
+    available,
+    requests: []
+  };
+
+  users.push(newUser);
+  currentUser = newUser;
+
+  hideModal('registerModal');
+  afterLogin();
+  updateStats();
+  showToast('🎉 Profile created! Welcome to HackMatch!');
+}
+
+function loginUser() {
+  const email = document.getElementById('login_email').value.trim();
+  const user = users.find(u => u.email === email);
+  if (!user) {
+    showToast('⚠️ No profile found for this email.', true); return;
+  }
+  currentUser = user;
+  hideModal('loginModal');
+  afterLogin();
+  showToast(`👋 Welcome back, ${user.name.split(' ')[0]}!`);
+}
+
+function afterLogin() {
+  document.getElementById('navRight').innerHTML = `
+    <span style="font-size:0.85rem;color:var(--text2);font-weight:500;">Hi, ${currentUser.name.split(' ')[0]} 👋</span>
+    <button class="nav-btn ghost" onclick="logout()">Log Out</button>
+  `;
+  document.getElementById('pageTabs').style.display = 'flex';
+  document.getElementById('page-landing').classList.remove('active');
+  renderRequests();
+  updateNotifDot();
+  switchTab('browse');
+}
+
+function logout() {
+  currentUser = null;
+  document.getElementById('navRight').innerHTML = `
+    <button class="nav-btn ghost" onclick="showModal('loginModal')">Log In</button>
+    <button class="nav-btn primary" onclick="showModal('registerModal')">Join Now</button>
+  `;
+  document.getElementById('pageTabs').style.display = 'none';
+  showPage('landing');
+}
+
+function guestBrowse() {
+  showPage('browse');
+  renderCards(users);
+  document.getElementById('createProfileBtn').style.display = 'flex';
+}
+
+// ══════════════════════════════════════
+//  BROWSE & CARDS
+// ══════════════════════════════════════
+
+function renderCards(list) {
+  const grid = document.getElementById('cardsGrid');
+  const empty = document.getElementById('emptyState');
+
+  // hide current user from browse
+  const filtered = list.filter(u => !currentUser || u.id !== currentUser.id);
+
+  if (filtered.length === 0) {
+    grid.innerHTML = '';
+    empty.style.display = 'block';
+    document.getElementById('browseCount').textContent = 'No results found';
+    return;
+  }
+
+  empty.style.display = 'none';
+  document.getElementById('browseCount').textContent = `Showing ${filtered.length} student${filtered.length !== 1 ? 's' : ''}`;
+
+  grid.innerHTML = filtered.map(u => {
+    const color = AVATAR_COLORS[u.id % AVATAR_COLORS.length];
+    const initials = u.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+    const skillHtml = u.skills.slice(0,4).map((s,i) => {
+      const c = SKILL_COLORS[i % SKILL_COLORS.length];
+      return `<span class="skill-tag" style="background:${c.bg};color:${c.color};border-color:${c.border};">${s}</span>`;
+    }).join('') + (u.skills.length > 4 ? `<span class="skill-tag" style="background:var(--surface2);color:var(--text3);border-color:var(--border);">+${u.skills.length-4}</span>` : '');
+
+    const canContact = currentUser && currentUser.id !== u.id;
+    const alreadySent = canContact && u.requests && u.requests.some(r => r.fromId === currentUser.id);
+
+    return `
+      <div class="profile-card" onclick="viewProfile(${u.id})">
+        <div class="card-top">
+          <div class="avatar" style="background:${color}">${initials}</div>
+          <div class="card-info">
+            <div class="card-name">${u.name}</div>
+            <div class="card-role">${u.role}</div>
+            <div class="card-year">${u.year} · ${u.dept}</div>
+          </div>
+          <span class="available-badge ${u.available ? 'yes' : 'no'}">${u.available ? '🟢 Open' : '🔴 Busy'}</span>
+        </div>
+        <div class="card-bio">${u.bio}</div>
+        <div class="skill-tags">${skillHtml}</div>
+        <div class="card-footer">
+          <div class="card-hackathons">Skills: <span>${u.skills.length}</span></div>
+          <button class="contact-btn" ${!canContact || alreadySent || !u.available ? 'disabled' : ''} onclick="event.stopPropagation(); openContact(${u.id})">
+            ${!currentUser ? '🔒 Login' : alreadySent ? '✓ Sent' : !u.available ? 'Busy' : 'Request'}
+          </button>
+        </div>
+      </div>
+    `;
+  }).join('');
+}
+
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  const role = document.getElementById('roleFilter').value;
+  const avail = document.getElementById('availFilter').value;
+
+  const result = users.filter(u => {
+    const matchQ = !q || u.name.toLowerCase().includes(q) || u.skills.some(s=>s.toLowerCase().includes(q)) || u.role.toLowerCase().includes(q);
+    const matchRole = !role || u.role === role;
+    const matchAvail = !avail || (avail === 'yes' ? u.available : !u.available);
+    return matchQ && matchRole && matchAvail;
+  });
+
+  renderCards(result);
+}
+
+// ══════════════════════════════════════
+//  VIEW PROFILE MODAL
+// ══════════════════════════════════════
+
+function viewProfile(id) {
+  const u = users.find(u => u.id === id);
+  if (!u) return;
+  const color = AVATAR_COLORS[u.id % AVATAR_COLORS.length];
+  const initials = u.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+  const canContact = currentUser && currentUser.id !== u.id;
+  const alreadySent = canContact && u.requests && u.requests.some(r => r.fromId === currentUser.id);
+
+  const skillHtml = u.skills.map((s,i) => {
+    const c = SKILL_COLORS[i % SKILL_COLORS.length];
+    return `<span class="skill-tag" style="background:${c.bg};color:${c.color};border-color:${c.border};padding:5px 12px;font-size:0.78rem;">${s}</span>`;
+  }).join('');
+
+  document.getElementById('viewProfileContent').innerHTML = `
+    <div style="display:flex;align-items:center;gap:16px;margin-bottom:20px;">
+      <div class="avatar" style="background:${color};width:64px;height:64px;font-size:1.4rem;">${initials}</div>
+      <div>
+        <div style="font-size:1.2rem;font-weight:700;">${u.name}</div>
+        <div style="font-family:'JetBrains Mono',monospace;color:var(--primary);font-size:0.8rem;margin-top:3px;">${u.role}</div>
+        <div style="font-size:0.78rem;color:var(--text3);margin-top:3px;">${u.year} · ${u.dept}</div>
+      </div>
+      <span class="available-badge ${u.available ? 'yes' : 'no'}" style="margin-left:auto;">${u.available ? '🟢 Open to Teams' : '🔴 Not Available'}</span>
+    </div>
+
+    <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:14px;margin-bottom:18px;font-size:0.87rem;color:var(--text2);line-height:1.7;">
+      ${u.bio}
+    </div>
+
+    <div style="margin-bottom:18px;">
+      <div style="font-size:0.82rem;font-weight:700;color:var(--text2);margin-bottom:10px;">Skills & Technologies</div>
+      <div style="display:flex;flex-wrap:wrap;gap:7px;">${skillHtml || '<span style="color:var(--text3);font-size:0.82rem;">No skills listed</span>'}</div>
+    </div>
+
+    ${u.github ? `<div style="margin-bottom:20px;"><a href="${u.github}" target="_blank" style="color:var(--primary);font-size:0.85rem;font-weight:500;text-decoration:none;">🔗 View Portfolio / GitHub</a></div>` : ''}
+
+    <button class="btn btn-primary" style="width:100%;justify-content:center;padding:12px;" 
+      ${!canContact || alreadySent || !u.available ? 'disabled style="background:var(--surface2);color:var(--text3);cursor:not-allowed;box-shadow:none;"' : ''}
+      onclick="hideModal('viewProfileModal');openContact(${u.id})">
+      ${!currentUser ? '🔒 Login to Contact' : alreadySent ? '✓ Request Already Sent' : !u.available ? '🔴 Not Available' : '✉️ Send Team Request'}
+    </button>
+  `;
+
+  showModal('viewProfileModal');
+}
+
+// ══════════════════════════════════════
+//  CONTACT / REQUESTS
+// ══════════════════════════════════════
+
+function openContact(id) {
+  if (!currentUser) { showModal('loginModal'); return; }
+  contactTarget = users.find(u => u.id === id);
+  if (!contactTarget) return;
+
+  const color = AVATAR_COLORS[contactTarget.id % AVATAR_COLORS.length];
+  const initials = contactTarget.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+
+  document.getElementById('contactPersonMini').innerHTML = `
+    <div class="avatar" style="background:${color};width:40px;height:40px;font-size:0.9rem;">${initials}</div>
+    <div>
+      <div style="font-weight:600;font-size:0.9rem;">${contactTarget.name}</div>
+      <div style="font-size:0.78rem;color:var(--primary);font-family:'JetBrains Mono',monospace;">${contactTarget.role}</div>
+    </div>
+  `;
+
+  document.getElementById('contact_hackathon').value = '';
+  document.getElementById('contact_msg').value = '';
+  showModal('contactModal');
+}
+
+function sendRequest() {
+  const hackathon = document.getElementById('contact_hackathon').value.trim();
+  const msg = document.getElementById('contact_msg').value.trim();
+
+  if (!msg) { showToast('⚠️ Please write a message', true); return; }
+
+  const request = {
+    fromId: currentUser.id,
+    fromName: currentUser.name,
+    fromRole: currentUser.role,
+    hackathon: hackathon || 'Upcoming Hackathon',
+    message: msg,
+    time: new Date().toLocaleString('en-IN', { dateStyle:'medium', timeStyle:'short' })
+  };
+
+  contactTarget.requests.push(request);
+
+  hideModal('contactModal');
+  renderCards(users);
+  showToast(`✅ Request sent to ${contactTarget.name.split(' ')[0]}!`);
+}
+
+function renderRequests() {
+  if (!currentUser) return;
+  const list = document.getElementById('requestsList');
+  const reqs = currentUser.requests;
+
+  if (!reqs || reqs.length === 0) {
+    list.innerHTML = `<div class="empty-state"><div class="empty-icon">📬</div><p>No team requests yet. Build a strong profile and get discovered!</p></div>`;
+    return;
+  }
+
+  list.innerHTML = reqs.map((r, i) => {
+    const sender = users.find(u => u.id === r.fromId);
+    const color = sender ? AVATAR_COLORS[sender.id % AVATAR_COLORS.length] : '#94a3b8';
+    const initials = r.fromName.split(' ').map(n=>n[0]).join('').slice(0,2);
+    return `
+      <div class="request-card" id="req_${i}">
+        <div class="avatar" style="background:${color};width:46px;height:46px;font-size:0.95rem;">${initials}</div>
+        <div class="request-info">
+          <div class="request-name">${r.fromName} <span style="font-weight:400;color:var(--text3);">· ${r.fromRole}</span></div>
+          <div class="request-msg">🏆 <strong>${r.hackathon}</strong> — ${r.message}</div>
+          <div class="request-time">Received ${r.time}</div>
+        </div>
+        <div class="request-actions">
+          <button class="btn-sm btn-accept" onclick="acceptRequest(${i})">✓ Accept</button>
+          <button class="btn-sm btn-decline" onclick="declineRequest(${i})">✕</button>
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  updateNotifDot();
+}
+
+function acceptRequest(i) {
+  const req = currentUser.requests[i];
+  document.getElementById(`req_${i}`).remove();
+  currentUser.requests.splice(i, 1);
+  renderRequests();
+  showToast(`🤝 Connected with ${req.fromName.split(' ')[0]}! Check your college email.`);
+}
+
+function declineRequest(i) {
+  document.getElementById(`req_${i}`).remove();
+  currentUser.requests.splice(i, 1);
+  renderRequests();
+  showToast('Request declined.');
+}
+
+function updateNotifDot() {
+  const dot = document.getElementById('notifDot');
+  if (dot) dot.style.display = currentUser && currentUser.requests.length > 0 ? 'inline-block' : 'none';
+}
+
+// ══════════════════════════════════════
+//  MY PROFILE PAGE
+// ══════════════════════════════════════
+
+function renderMyProfile() {
+  if (!currentUser) return;
+  const u = currentUser;
+  const color = AVATAR_COLORS[u.id % AVATAR_COLORS.length];
+  const initials = u.name.split(' ').map(n=>n[0]).join('').slice(0,2);
+
+  const skillHtml = u.skills.map((s,i) => {
+    const c = SKILL_COLORS[i % SKILL_COLORS.length];
+    return `<span class="skill-tag" style="background:${c.bg};color:${c.color};border-color:${c.border};padding:6px 14px;font-size:0.8rem;">${s}</span>`;
+  }).join('') || '<span style="color:var(--text3);font-size:0.85rem;">No skills added yet</span>';
+
+  document.getElementById('myProfileContent').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+      <div><h2 style="font-size:1.4rem;font-weight:700;letter-spacing:-0.02em;">My Profile</h2><p style="font-size:0.87rem;color:var(--text3);margin-top:4px;">This is how others see you</p></div>
+      <button class="btn btn-outline" onclick="showModal('editModal')" style="font-size:0.85rem;padding:9px 18px;">✏️ Edit Profile</button>
+    </div>
+
+    <div class="profile-hero">
+      <div class="profile-avatar-lg" style="background:${color}">${initials}</div>
+      <div class="profile-details">
+        <div class="profile-name">${u.name}</div>
+        <div class="profile-role-tag">⚡ ${u.role}</div>
+        <div class="profile-meta">
+          <div class="meta-item">📅 <strong>${u.year}</strong></div>
+          <div class="meta-item">🏛️ <strong>${u.dept}</strong></div>
+          <div class="meta-item">✉️ <strong>${u.email}</strong></div>
+        </div>
+        <div style="margin-top:12px;">
+          <span class="available-badge ${u.available ? 'yes' : 'no'}" style="font-size:0.78rem;">
+            ${u.available ? '🟢 Open to Team Up' : '🔴 Not Available Right Now'}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="section-title">About Me</div>
+      <p style="font-size:0.88rem;color:var(--text2);line-height:1.75;">${u.bio}</p>
+    </div>
+
+    <div class="profile-section">
+      <div class="section-title">Skills & Technologies (${u.skills.length})</div>
+      <div style="display:flex;flex-wrap:wrap;gap:8px;">${skillHtml}</div>
+    </div>
+
+    ${u.github ? `
+    <div class="profile-section">
+      <div class="section-title">Portfolio / Links</div>
+      <a href="${u.github}" target="_blank" style="color:var(--primary);font-weight:500;font-size:0.87rem;text-decoration:none;">🔗 ${u.github}</a>
+    </div>` : ''}
+
+    <div class="profile-section">
+      <div class="section-title">Team Requests (${u.requests.length})</div>
+      ${u.requests.length > 0
+        ? `<p style="font-size:0.87rem;color:var(--text2);">You have <strong style="color:var(--primary);">${u.requests.length}</strong> pending team request${u.requests.length > 1 ? 's' : ''}. <a href="#" style="color:var(--primary);" onclick="switchTab('requests')">View them →</a></p>`
+        : `<p style="font-size:0.87rem;color:var(--text3);">No requests yet. Make sure your profile is complete and you're marked as available!</p>`
+      }
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════
+//  NAVIGATION
+// ══════════════════════════════════════
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const idx = ['browse','myprofile','requests'].indexOf(tab);
+  document.querySelectorAll('.tab-btn')[idx]?.classList.add('active');
+
+  showPage(tab);
+
+  if (tab === 'browse') {
+    renderCards(users);
+    document.getElementById('searchInput').value = '';
+    document.getElementById('roleFilter').value = '';
+    document.getElementById('availFilter').value = '';
+    document.getElementById('createProfileBtn').style.display = 'none';
+  } else if (tab === 'myprofile') {
+    renderMyProfile();
+  } else if (tab === 'requests') {
+    renderRequests();
+    updateNotifDot();
+  }
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const el = document.getElementById('page-' + id);
+  if (el) el.classList.add('active');
+}
+
+// ══════════════════════════════════════
+//  MODALS
+// ══════════════════════════════════════
+
+function showModal(id) {
+  document.getElementById(id).classList.add('open');
+}
+
+function hideModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+// Close on overlay click
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', e => {
+    if (e.target === overlay) overlay.classList.remove('open');
+  });
+});
+
+// ══════════════════════════════════════
+//  TOAST
+// ══════════════════════════════════════
+
+let toastTimeout;
+function showToast(msg, isError = false) {
+  const toast = document.getElementById('toast');
+  document.getElementById('toastMsg').textContent = msg;
+  document.getElementById('toastIcon').textContent = isError ? '⚠️' : '✅';
+  toast.style.background = isError ? '#dc2626' : 'var(--text)';
+  toast.classList.add('show');
+  clearTimeout(toastTimeout);
+  toastTimeout = setTimeout(() => toast.classList.remove('show'), 3200);
+}
+
+// animate stats
+let statsAnimated = false;
+function animateStats() {
+  if (statsAnimated) return;
+  statsAnimated = true;
+  [['statStudents', users.length], ['statAvailable', users.filter(u=>u.available).length]].forEach(([id, target]) => {
+    let n = 0;
+    const el = document.getElementById(id);
+    const step = () => { n = Math.min(n + 1, target); el.textContent = n; if (n < target) requestAnimationFrame(step); };
+    step();
+  });
+}
+setTimeout(animateStats, 400);
+</script>
+</body>
+</html>
